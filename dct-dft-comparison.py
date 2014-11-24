@@ -25,8 +25,10 @@ sequences=[
 [-3.,1,3,-1,-2,1,3,-3],
 # [5] energy conservation!
 [0]*10+[20]+[0]*9,
+# [6] singleton
+[0,1,0,0]
 ]
-x=array(sequences[0],dtype=float)
+x=array(sequences[1],dtype=float)
 
 
 
