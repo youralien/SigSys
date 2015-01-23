@@ -1,6 +1,7 @@
 from numpy.fft import (fft,fftshift)
-from matplotlib.pyplot import (grid,figure,clf,stem,subplot,xlabel,xlim)
-from numpy import(abs,angle,pi,linspace,cos,mod,concatenate)
+from matplotlib.pyplot import (grid,figure,clf,stem,subplot,xlabel,xlim,plot,
+                               setp,ylabel,ylim)
+from numpy import(abs,angle,pi,linspace,cos,mod,concatenate,array)
 
 def clean(a):
     '''Sets array values below tolerance to zero.'''
@@ -13,40 +14,54 @@ def dftplot(t,x):
     '''Plots a sequence an its centered dft.'''
     
     fs=1/(t[1]-t[0])    
-    fmin=-fs/2+mod(2*fs,2)/4.
-    fmax=fs/2+mod(2*fs,2)/4.
+    fmin=-fs/2+mod(fs,2)/2.
+    fmax=fs/2+mod(fs,2)/2.
     f=linspace(fmin,fmax,len(t))
     
+    def mystem(t,x):
+        markerline, stemlines, baseline = stem(t,x)#, markerfmt="")
+        setp(baseline, 'color','k', 'linewidth', 1)        
+        #setp(markerline, 'color',color, 'linewidth', 1)       
+        
     fig=figure(1)
     clf()
     subplot(2,1,1)
-    stem(t,x)
+    mystem(t[:-1],x[:-1])
+    mystem([t[-1]],[x[-1]])
+    #plot(t,x,':',lw=.5)
     grid()
+    ylabel('signal')
     xlabel('time (s)')
     
     x=x[:-1]
-    xt=clean(fft(x))
+    xt=clean(fft(x)/(len(t)-1))
     xt=fftshift(xt)
     xt=concatenate([xt,[xt[0]]])
     
     subplot(4,1,3)
-    stem(f,abs(xt))
+    mystem(f,abs(xt))
+    #plot(f,abs(xt),':',lw=.5)
     #axvline(10)
     grid()
-    xlim([fmin,fmax])
+    ylabel('magnitude')
+    xlim([1.1*fmin,1.1*fmax])
+    ylim([0,1.1*max(abs(xt))])
     subplot(4,1,4)
-    stem(f,angle(xt)/pi)
+    mystem(f,angle(xt)/pi)
+    #plot(f,angle(xt)/pi,':',lw=.5)
     grid()
-    xlim([fmin,fmax])    
+    ylabel('phase/pi')
+    xlim([1.1*fmin,1.1*fmax])
+    ylim([-1,1])    
     xlabel('frequency (Hz)')
     return fig
     
-tstart=-1
+tstart=0
 tend=1
-fs=15
+fs=2
 bign=(tend-tstart)*fs+1
 t=linspace(tstart,tend,bign)
-x=cos(2*pi*1.5*t)#+pi/2)
+x=cos(2*pi*1*t+0)#+pi/2)
 dftplot(t,x)
 
 
