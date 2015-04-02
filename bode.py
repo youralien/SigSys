@@ -22,13 +22,15 @@ plt.clf()
 plt.subplot(2,1,1)
 plt.loglog(w, 10**(mag/20),lw=2)
 plt.grid(which='both')
-plt.ylabel('magnitude (dB)')
+plt.ylabel('magnitude')
+plt.margins(.1)
 
 plt.subplot(2,1,2)
 plt.semilogx(w, phase/180,lw=2)
 plt.grid(which='both')
-plt.ylabel('phase (rad/pi)')
-plt.xlabel('w (rad/s)')
+plt.ylabel('phase/pi')
+plt.xlabel('$w$ (rad/s)')
+plt.margins(.1)
 
 plt.show()
 
